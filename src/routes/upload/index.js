@@ -4,11 +4,10 @@ import multer from 'multer';
 import fs from 'fs';
 import path from 'path';
 import {Md5things} from '../../crypto/md5things.js';
-import { fileURLToPath } from 'url';
 
 const router = express.Router();
 const md5things = new Md5things();
-
+let uploadError = null;
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     
@@ -42,7 +41,8 @@ const upload = multer({
       cb(null, true);
     } else
     {
-      cb(new Error('Only image files are allowed!'));
+      uploadError = { code: -104, message: '只允许上传图片文件' };
+      cb(null, false);
     }
   }
 });
@@ -51,6 +51,12 @@ router.post('/upload', upload.single('image'), async (req, res) =>
 {
   try
   {
+    if (uploadError) {
+      // 如果有错误信息，返回错误
+      res.status(400).json(uploadError);
+      uploadError = null; // 清空错误信息
+      return;
+    }
     const originalExt = path.extname(req.file.originalname);
     const downloadUrl = `/file/${req.file.filename}${originalExt}`;
 
@@ -58,6 +64,7 @@ router.post('/upload', upload.single('image'), async (req, res) =>
   } catch (error)
   {
     console.error(error);
+    console.log(1)
     res.json({ code: -104, message: 'Error' });
     return;
   }
