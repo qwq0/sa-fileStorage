@@ -10,12 +10,13 @@ const routes = [
     upload
 ]
 const currentWorkingDir = process.cwd();
-app.use('/image', express.static(path.join(currentWorkingDir, 'data/storage/image')));
 
-app.get('/image/:folder/:filename.:ext', (req, res) => {
-  const { folder, filename, ext } = req.params;
+app.get('/file/:filename.:ext', (req, res) => {
+  const {filename, ext } = req.params;
+
+  const folder = filename.substring(0, 2);
+
   const filePath = path.join(currentWorkingDir, 'data/storage/image', folder, `${filename}`);
-  
   // 检查文件是否存在
   res.sendFile(filePath, (err) => {
     if (err) {
