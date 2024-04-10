@@ -7,13 +7,14 @@ import {Md5things} from '../../crypto/md5things.js';
 import { fileURLToPath } from 'url';
 
 const router = express.Router();
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const md5things = new Md5things();
+
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const md5things = new Md5things();
+    
     const hash = md5things.calculateMd5(file.originalname);
     const child = hash.substring(0, 2);
-    const uploadPath = `Image/${child}/`;
+    const uploadPath = `data/storage/image/${child}/`;
     // 检查目标目录是否存在，如果不存在则创建
     fs.mkdir(uploadPath, { recursive: true }, (err) => {
       if (err) {
@@ -24,7 +25,6 @@ const storage = multer.diskStorage({
     });
   },
   filename: function (req, file, cb) {
-    const md5things = new Md5things();
     const hash = md5things.calculateMd5(file.originalname);
     const filename = hash;
     cb(null, filename);
@@ -51,9 +51,13 @@ router.post('/upload', upload.single('image'), async (req, res) =>
 {
   try
   {
-    const request = req.body;
-    console.log(request);
-    res.json({ code: 0, message: 'Success' });
+    const imagePath = path.join('/image', req.file.path.replace(/\\/g, '/')); // 将路径中的反斜杠转换为正斜杠
+    const originalExt = path.extname(req.file.originalname);
+    const hash = md5things.calculateMd5(req.file.originalname);
+    const child = hash.substring(0, 2);
+    const downloadUrl = `${req.protocol}://${req.get('host')}/image/${child}/${req.file.filename}${originalExt}`;
+
+    res.json({ code: 0, message: 'Success' , downloadUrl: downloadUrl});
   } catch (error)
   {
     console.error(error);
