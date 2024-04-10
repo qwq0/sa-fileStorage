@@ -51,9 +51,8 @@ router.post('/upload', upload.single('image'), async (req, res) =>
 {
   try
   {
-    const imagePath = path.join('/image', req.file.path.replace(/\\/g, '/')); // 将路径中的反斜杠转换为正斜杠
     const originalExt = path.extname(req.file.originalname);
-    const downloadUrl = `/image/${req.file.filename}${originalExt}`;
+    const downloadUrl = `/file/${req.file.filename}${originalExt}`;
 
     res.json({ code: 0, message: 'Success' , downloadUrl: downloadUrl});
   } catch (error)
