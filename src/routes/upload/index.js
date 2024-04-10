@@ -53,9 +53,7 @@ router.post('/upload', upload.single('image'), async (req, res) =>
   {
     const imagePath = path.join('/image', req.file.path.replace(/\\/g, '/')); // 将路径中的反斜杠转换为正斜杠
     const originalExt = path.extname(req.file.originalname);
-    const hash = md5things.calculateMd5(req.file.originalname);
-    const child = hash.substring(0, 2);
-    const downloadUrl = `${req.protocol}://${req.get('host')}/image/${child}/${req.file.filename}${originalExt}`;
+    const downloadUrl = `/image/${req.file.filename}${originalExt}`;
 
     res.json({ code: 0, message: 'Success' , downloadUrl: downloadUrl});
   } catch (error)
