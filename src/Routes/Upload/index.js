@@ -64,7 +64,6 @@ router.post('/upload', upload.single('image'), async (req, res) =>
   } catch (error)
   {
     console.error(error);
-    console.log(1)
     res.json({ code: -104, message: 'Error' });
     return;
   }
