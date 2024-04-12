@@ -7,7 +7,7 @@ export class Select extends Database{
 
     async selectResource(id){
         try{
-            const resourceTable = await this.ResourceTable();
+            const resourceTable = await this.resourceTable();
             const resource = await resourceTable.findOne({
                 where: {
                     id: id

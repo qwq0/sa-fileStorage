@@ -1,4 +1,4 @@
-import { Sequelize, DataTypes  } from "@sequelize/core";
+import { Sequelize, DataTypes } from "@sequelize/core";
 
 export class Database
 {
@@ -23,9 +23,10 @@ export class Database
         }
     }
 
-    async ResourceTable(){
+    async resourceTable()
+    {
         const resourceTable = this.sequelize.define('resources', {
-            id: { 
+            id: {
                 type: DataTypes.STRING,
                 primaryKey: true,
                 allowNull: false,
@@ -35,9 +36,40 @@ export class Database
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-        })
-        await this.sequelize.sync({ alter: true });
+        });
+        await this.sequelize.sync();
         return resourceTable;
     }
 
+    async quoteTable()
+    {
+        const resource = await this.resourceTable();
+        const quoteTable = this.sequelize.define('quotes', {
+            id: {
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                allowNull: false,
+                unique: true,
+                autoIncrement: true
+            },
+            expired: {
+                type: DataTypes.DATE,
+                allowNull: false,
+                index: true
+            },
+            fileName:{
+                type: DataTypes.STRING,
+                allowNull: false,
+                index: true,
+                unique: true,
+                references: {
+                    model: resource,
+                    key: 'id'
+                }
+            }
+
+        });
+        await this.sequelize.sync();
+        return quoteTable;
+    }
 }

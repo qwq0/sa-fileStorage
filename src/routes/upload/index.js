@@ -73,8 +73,7 @@ router.post('/upload', upload.single('image'), async (req, res) =>
     const originalExt = path.extname(req.file.originalname);
     const downloadUrl = `/file/${req.file.filename}${originalExt}`;
     const insert = new Insert();
-    console.log()
-    await insert.insertResource(req.file.filename, req.ip);
+    await insert.insertResource(req.file.filename, req.ip, new Date(Date.now() + 24 * 60 * 60 * 1000));
     res.json({ code: 0, message: 'Success', downloadUrl: downloadUrl });
   } catch (error)
   {
