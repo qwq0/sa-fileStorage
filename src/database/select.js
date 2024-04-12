@@ -4,7 +4,6 @@ export class Select extends Database{
     constructor(){
         super();
     }
-
     /**
      * 查找资源
      * @param {String} id // 资源的ID (文件名)
