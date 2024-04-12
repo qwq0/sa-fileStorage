@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { Md5things } from '../../crypto/Md5things.js';
 import { Insert } from '../../database/Insert.js';
-import { Select } from '../../database/select.js';
+import { Select } from '../../database/Select.js';
 
 const router = express.Router();
 const md5things = new Md5things();

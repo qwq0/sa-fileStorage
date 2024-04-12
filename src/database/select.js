@@ -5,6 +5,11 @@ export class Select extends Database{
         super();
     }
 
+    /**
+     * 查找资源
+     * @param {String} id // 资源的ID (文件名)
+     * @returns 
+     */
     async selectResource(id){
         try{
             const resourceTable = await this.resourceTable();
