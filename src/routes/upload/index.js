@@ -62,7 +62,7 @@ router.post('/upload', upload.single('image'), async (req, res) =>
     const saveResult = await filethings.trySaveFile(file);
     if(saveResult.status){
       const insert = new Insert();
-      await insert.insertResource(file.filename, req.ip, file.size, new Date(Date.now() + 24 * 60 * 60 * 1000));
+      await insert.insertResource(file.filename, req.ip, file.size, new Date(Date.now() + 10 * 60 * 1000));
       res.json({ code: 0, message: 'Success', downloadUrl: downloadUrl });
     } else {
       res.json({ code: -104, message: saveResult.message });
