@@ -1,8 +1,7 @@
 import express from 'express';
-import upload from './routes/upload/index.js';
+import {upload} from './routes/upload/index.js';
 import bodyParser from 'body-parser';
 import path from 'path';
-import { Database } from './database/index.js';
 const app = express();
 const port = 3000;
 
