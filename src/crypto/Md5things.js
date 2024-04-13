@@ -3,7 +3,7 @@ import crypto from 'crypto';
 export class Md5things{
 
     /**
-     * 
+     * 计算MD5值
      * @param {Buffer} data 
      * @returns 
      */
@@ -12,4 +12,5 @@ export class Md5things{
         hash.update(data);
         return hash.digest('hex');
     }
+
 }

@@ -11,22 +11,24 @@ export class Insert extends Database
      * 插入资源到数据库
      * @param {string} id - 资源的ID (资源的名)
      * @param {string} ip - 用户的IP地址
+     * @param {number} size - 资源的大小
      * @param {Date} expired - 过期时间
      * @returns {Promise<void>} - 插入操作的 Promise 对象
      */
-    async insertResource(id, ip, expired)
+    async insertResource(id, ip, size, expired)
     {
         const t = await this.sequelize.startUnmanagedTransaction();
         try
         {
             const resourceTable = await this.resourceTable();
             const quoteTable = await this.quoteTable();
-            const resource = await resourceTable.create({
+            resourceTable.create({
                 id: id,
-                ip: ip
+                ip: ip,
+                size: size
             },{transaction: t});
 
-            const quote = await quoteTable.create({
+            quoteTable.create({
                 expired: expired,
                 fileName: id
             }, {transaction: t});

@@ -5,7 +5,7 @@ export class FileThings
 {
 
     /**
-     * 
+     * 储存文件
      * @param {Express.Multer.File} file 
      * @returns 
      */

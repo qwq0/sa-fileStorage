@@ -36,6 +36,10 @@ export class Database
                 type: DataTypes.STRING,
                 allowNull: false,
             },
+            size: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
         });
         await this.sequelize.sync();
         return resourceTable;
