@@ -22,23 +22,22 @@ export class Insert extends Database
         {
             const resourceTable = await this.resourceTable();
             const quoteTable = await this.quoteTable();
-            resourceTable.create({
+            await resourceTable.create({
                 id: id,
                 ip: ip,
                 size: size
             },{transaction: t});
 
-            quoteTable.create({
+            await quoteTable.create({
                 expired: expired,
                 fileName: id
             }, {transaction: t});
             await t.commit();
-            return Promise.resolve();
         } catch (error)
         {
             console.error('Unable to insert to the database:', error);
             await t.rollback();
-            return Promise.reject(error);
+            throw new Error('Unable to insert to the database');
         }
     }
 }
