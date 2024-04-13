@@ -1,8 +1,7 @@
 // src/routes/Login/index.ts
 import express from 'express';
 import multer from 'multer';
-import fs from 'fs';
-import path, { resolve } from 'path';
+import path from 'path';
 import { Md5things } from '../../crypto/Md5things.js';
 import { Insert } from '../../database/Insert.js';
 import { Select } from '../../database/Select.js';
@@ -11,28 +10,6 @@ import { FileThings } from '../../File/FileThings.js';
 const router = express.Router();
 const md5things = new Md5things();
 let uploadError = null;
-
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb)
-//   {
-//     const hash = md5things.calculateMd5(file.originalname);
-//     const child = hash.substring(0, 2);
-//     const uploadPath = `data/storage/image/${child}/`;
-//     // 检查目标目录是否存在，如果不存在则创建
-//     fs.mkdir(uploadPath, { recursive: true }, (err) =>
-//     {
-//       if (err)
-//       {
-//         console.error('无法创建目标目录:', err);
-//         return cb(err, null);
-//       }
-//       cb(null, uploadPath);
-//     });
-//   },
-//   filename: function (req, file, cb){
-//     cb(null, file.filename);
-//   }
-// });
 
 const storage = multer.memoryStorage();
 
