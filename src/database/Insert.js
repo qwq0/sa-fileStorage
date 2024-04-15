@@ -1,11 +1,8 @@
+import { Model, Sequelize } from "@sequelize/core";
 import { Database } from "./index.js";
 
-export class Insert extends Database
+export class Insert
 {
-    constructor()
-    {
-        super();
-    }
 
     /**
      * 插入资源到数据库
@@ -13,22 +10,21 @@ export class Insert extends Database
      * @param {string} ip - 用户的IP地址
      * @param {number} size - 资源的大小
      * @param {Date} expired - 过期时间
+     * @param {{connect: Sequelize;resourceTable: import('@sequelize/core').ModelStatic<Model<any, any>>;quoteTable: import('@sequelize/core').ModelStatic<Model<any, any>>;}} databaseObject
      * @returns {Promise<void>} - 插入操作的 Promise 对象
      */
-    async insertResource(id, ip, size, expired)
+    async insertResource(id, ip, size, expired, databaseObject)
     {
-        const t = await this.sequelize.startUnmanagedTransaction();
+        const t = await databaseObject.connect.startUnmanagedTransaction();
         try
         {
-            const resourceTable = await this.resourceTable();
-            const quoteTable = await this.quoteTable();
-            await resourceTable.create({
+            await databaseObject.resourceTable.create({
                 id: id,
                 ip: ip,
                 size: size
             },{transaction: t});
 
-            await quoteTable.create({
+            await databaseObject.quoteTable.create({
                 expired: expired,
                 fileName: id
             }, {transaction: t});

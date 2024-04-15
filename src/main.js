@@ -1,12 +1,23 @@
 import express from 'express';
-import {upload} from './routes/upload/index.js';
+import {Upload} from './routes/upload/index.js';
 import bodyParser from 'body-parser';
 import path from 'path';
+import {Database} from './database/index.js';
 const app = express();
 const port = 3000;
 
+const db = new Database();
+
+const databaseObject = {
+  connect: db.connectDatabase(),
+  resourceTable: await db.resourceTable(),
+  quoteTable: await db.quoteTable()
+}
+
+const upload = new Upload();
+
 const routes = [
-  upload
+  upload.uploadRouter(databaseObject)
 ];
 const currentWorkingDir = process.cwd();
 

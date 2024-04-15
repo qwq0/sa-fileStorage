@@ -4,23 +4,16 @@ export class Database
 {
     constructor()
     {
+        
         this.sequelize = new Sequelize({
             dialect: 'sqlite',
-            storage: './database/database.sqlite',
+            storage: './data/database/database.sqlite',
             logging: false
         });
-        this.init();
     }
 
-    async init()
-    {
-        try
-        {
-            await this.sequelize.authenticate();
-        } catch (error)
-        {
-            console.error('Unable to connect to the database:', error);
-        }
+    connectDatabase(){
+        return this.sequelize
     }
 
     async resourceTable()
