@@ -3,6 +3,7 @@ import {Upload} from './routes/upload/index.js';
 import bodyParser from 'body-parser';
 import path from 'path';
 import {Database} from './database/index.js';
+import { Task } from './task/Task.js';
 const app = express();
 const port = 3000;
 
@@ -19,6 +20,10 @@ const upload = new Upload();
 const routes = [
   upload.uploadRouter(databaseObject)
 ];
+
+const task = new Task();
+task.init(databaseObject);
+
 const currentWorkingDir = process.cwd();
 
 app.get('/file/:filename.:ext', (req, res) =>
