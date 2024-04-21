@@ -16,11 +16,9 @@ export class FileThings
             message: 'Success'
         };
 
-        const folder = file.filename.substring(0, 2);
-        const uploadPath = `data/storage/image/${folder}/`;
-        const filePath = path.join(uploadPath, `${file.filename}`);
+        const fp = this.getFilePath(file.filename);
 
-        fs.mkdir(uploadPath, { recursive: true }, (err) =>
+        fs.mkdir(fp.uploadPath, { recursive: true }, (err) =>
         {
             if (err)
             {
@@ -29,7 +27,7 @@ export class FileThings
                 saveresult.message = '无法创建目标目录';
                 return Promise.reject(saveresult);
             }
-            fs.writeFile(filePath, file.buffer, (err) =>
+            fs.writeFile(fp.filePath, file.buffer, (err) =>
             {
                 if (err)
                 {
@@ -42,5 +40,18 @@ export class FileThings
         });
 
         return Promise.resolve(saveresult);
+    }
+
+    /**
+     * 获得文件路径
+     * @param {string} filename 
+     */
+    getFilePath(filename)
+    {
+        const folder = filename.substring(0, 2);
+        const uploadPath = `data/storage/image/${folder}/`;
+        const filePath = path.join(uploadPath, `${filename}`);
+        const fp = {filePath, uploadPath}
+        return  fp;
     }
 }

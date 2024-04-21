@@ -1,5 +1,7 @@
 import { Model, Sequelize } from '@sequelize/core';
 import { Select } from '../database/Select.js';
+import { FileThings } from '../File/FileThings.js';
+import fs from 'fs';
 
 export class Task
 {
@@ -12,6 +14,11 @@ export class Task
     init(databaseObject)
     {
         this.regCheckDel(databaseObject);
+        const threehour = 1000 * 60 * 60 * 3;
+        const interval = setInterval(async () =>
+        {
+            await this.regCheckDel(databaseObject);
+        }, threehour);
     }
 
     /**
@@ -31,10 +38,33 @@ export class Task
             // 检查获取的日期是否比当前日期早
             if (expiredDate < currentDate)
             {
-                console.log("获取的日期早于当前日期");
-            } else
-            {
-                console.log("获取的日期晚于或等于当前日期");
+                const Filethings = new FileThings();
+                const fp = Filethings.getFilePath(item.dataValues.fileName);
+                fs.unlink(fp.filePath, (err) =>
+                {
+                    if (err)
+                    {
+                        console.error('无法删除文件:', err);
+                        return Promise.reject('无法删除文件');
+                    } else {
+                        fs.readdir(fp.uploadPath, (err, files) => {
+                            if(files.length === 0) {
+                                fs.rmdir(fp.uploadPath, (err) => {
+                                    if (err) {
+                                        console.error('无法删除目录:', err);
+                                        return Promise.reject('无法删除目录');
+                                    }
+                                })
+                            }
+                        })
+                    }
+                });
+
+                await databaseObject.quoteTable.destroy({ where: { fileName: item.dataValues.fileName } });
+                await databaseObject.resourceTable.destroy({ where: { id: item.dataValues.fileName } });
+                
+
+                
             }
 
         }
