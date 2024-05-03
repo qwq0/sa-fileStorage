@@ -1,24 +1,33 @@
 import express from 'express';
-import {Upload} from './routes/upload/index.js';
+import { Upload } from './routes/upload/Upload.js';
+import { IncreaseQuote } from './routes/increaseQuote/IncreaseQuote.js';
 import bodyParser from 'body-parser';
 import path from 'path';
-import {Database} from './database/index.js';
+import { Database } from './database/index.js';
 import { Task } from './task/Task.js';
+import { FileThings } from './File/FileThings.js';
 const app = express();
-const port = 3000;
 
-const db = new Database();
+const ft = new FileThings();
+
+const config = await ft.getConfig();
+
+const db = new Database(config.database.dialect, config.database.storage, config.database.logging);
+
+console.log(config);
 
 const databaseObject = {
   connect: db.connectDatabase(),
   resourceTable: await db.resourceTable(),
   quoteTable: await db.quoteTable()
-}
+};
 
 const upload = new Upload();
+const increaseQuote = new IncreaseQuote();
 
 const routes = [
-  upload.uploadRouter(databaseObject)
+  upload.createRouter(databaseObject),
+  increaseQuote.createRouter(databaseObject)
 ];
 
 const task = new Task();
@@ -53,8 +62,8 @@ app.get('/', (req, res) =>
 
 app.use('/', routes);
 
-app.listen(port, () =>
+app.listen(config.server.port, () =>
 {
-  console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`Example app listening at http://${config.server.host}:${config.server.port}`);
 });
 

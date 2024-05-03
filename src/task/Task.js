@@ -59,12 +59,8 @@ export class Task
                         })
                     }
                 });
-
                 await databaseObject.quoteTable.destroy({ where: { fileName: item.dataValues.fileName } });
                 await databaseObject.resourceTable.destroy({ where: { id: item.dataValues.fileName } });
-                
-
-                
             }
 
         }

@@ -1,5 +1,4 @@
 import { Model } from "@sequelize/core";
-import { Database } from "./index.js";
 
 export class Select{
     /**
@@ -8,7 +7,7 @@ export class Select{
      * @param {import('@sequelize/core').ModelStatic<Model<any, any>>} table // resourceTable表
      * @returns 
      */
-    async selectResource(id, table){
+    async selectByID(id, table){
         try{
             const resourceTable = table;
             const resource = await resourceTable.findOne({

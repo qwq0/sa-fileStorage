@@ -1,6 +1,17 @@
 import fs from 'fs';
 import path from 'path';
 
+/**
+ * @typedef {Object} Config
+ * @property {Object} database - Database configuration
+ * @property {"sqlite" | "mysql" | "postgres" | "mariadb" | "mssql" | "db2" | "snowflake" | "ibmi"} database.dialect - Database dialect
+ * @property {string} database.storage - Database storage path
+ * @property {boolean} database.logging - Database logging
+ * @property {Object} server - Server configuration
+ * @property {string} server.host - Server host
+ * @property {number} server.port - Server port
+ */
+
 export class FileThings
 {
 
@@ -51,7 +62,39 @@ export class FileThings
         const folder = filename.substring(0, 2);
         const uploadPath = `data/storage/image/${folder}/`;
         const filePath = path.join(uploadPath, `${filename}`);
-        const fp = {filePath, uploadPath}
-        return  fp;
+        const fp = { filePath, uploadPath };
+        return fp;
+    }
+
+    /**
+     * Read and parse configuration from config.json file.
+     * @returns {Promise<Config>} Promise object representing the configuration.
+     */
+    getConfig()
+    {
+        const configPath = path.resolve('./', 'config.json');
+
+        return new Promise((resolve, reject) =>
+        {
+            fs.readFile(configPath, 'utf8', (err, data) =>
+            {
+                if (err)
+                {
+                    console.error('Error reading config file:', err);
+                    reject(err);
+                    return;
+                }
+
+                try
+                {
+                    const config = JSON.parse(data);
+                    resolve(config);
+                } catch (parseError)
+                {
+                    console.error('Error parsing config file:', parseError);
+                    reject(parseError);
+                }
+            });
+        });
     }
 }

@@ -2,13 +2,18 @@ import { Sequelize, DataTypes } from "@sequelize/core";
 
 export class Database
 {
-    constructor()
+    /**
+     * 
+     * @param {"sqlite" | "mysql" | "postgres" | "mariadb" | "mssql" | "db2" | "snowflake" | "ibmi"} dialect 
+     * @param {string} storage 
+     * @param {boolean} logging
+     */
+    constructor(dialect, storage, logging)
     {
-        
         this.sequelize = new Sequelize({
-            dialect: 'sqlite',
-            storage: './data/database/database.sqlite',
-            logging: false
+            dialect: dialect,
+            storage: storage,
+            logging: logging
         });
     }
 
@@ -43,11 +48,10 @@ export class Database
         const resource = await this.resourceTable();
         const quoteTable = this.sequelize.define('quotes', {
             id: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.STRING,
                 primaryKey: true,
                 allowNull: false,
-                unique: true,
-                autoIncrement: true
+                unique: true
             },
             expired: {
                 type: DataTypes.DATE,

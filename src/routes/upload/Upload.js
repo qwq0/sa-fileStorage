@@ -7,6 +7,7 @@ import { Insert } from '../../database/Insert.js';
 import { Select } from '../../database/Select.js';
 import { FileThings } from '../../File/FileThings.js';
 import { Model, Sequelize } from '@sequelize/core';
+import { randomUUID } from 'crypto';
 export class Upload
 {
 
@@ -15,7 +16,7 @@ export class Upload
    * @param {{connect: Sequelize;resourceTable: import('@sequelize/core').ModelStatic<Model<any, any>>;quoteTable: import('@sequelize/core').ModelStatic<Model<any, any>>;}} databaseObject 
    * @returns 
    */
-  uploadRouter(databaseObject)
+  createRouter(databaseObject)
   {
     const router = express.Router();
     const md5things = new Md5things();
@@ -62,7 +63,18 @@ export class Upload
 
         const select = new Select();
 
-        const resource = await select.selectResource(file.filename,databaseObject.resourceTable);
+        const resource = await select.selectByID(file.filename,databaseObject.resourceTable);
+
+        let randomString = randomUUID();
+
+        let quoteResource = await select.selectByID(randomString,databaseObject.quoteTable);
+        
+        do{
+          randomString = randomUUID();
+          quoteResource = await select.selectByID(randomString,databaseObject.quoteTable);
+        } while (quoteResource);
+
+        
 
         if (resource)
         {
@@ -74,7 +86,7 @@ export class Upload
         if (saveResult.status)
         {
           const insert = new Insert();
-          await insert.insertResource(file.filename, req.ip, file.size, new Date(Date.now() + 10 * 60 * 1000), databaseObject);
+          await insert.insertResource(file.filename, randomString, req.ip, file.size, new Date(Date.now() + 10 * 60 * 1000), databaseObject);
           res.json({ code: 0, message: 'Success', downloadUrl: downloadUrl });
         } else
         {

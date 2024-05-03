@@ -1,0 +1,12 @@
+{
+    "database": {
+      "dialect": "sqlite",
+      "storage": "./data/database/database.sqlite",
+      "logging": false
+    },
+    "server": {
+      "host": "localhost",
+      "port": 3000
+    }
+  }
+  
