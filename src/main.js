@@ -27,7 +27,7 @@ const increaseQuote = new IncreaseQuote();
 
 const routes = [
   upload.createRouter(databaseObject),
-  increaseQuote.createRouter(databaseObject)
+  increaseQuote.createRouter(databaseObject, config.server.token)
 ];
 
 const task = new Task();

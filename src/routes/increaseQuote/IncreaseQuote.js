@@ -12,15 +12,21 @@ export class IncreaseQuote
     /**
    * 
    * @param {{connect: Sequelize;resourceTable: import('@sequelize/core').ModelStatic<Model<any, any>>;quoteTable: import('@sequelize/core').ModelStatic<Model<any, any>>;}} databaseObject 
+   * @param {string} expectedtoken
    * @returns 
    */
-    createRouter(databaseObject)
+    createRouter(databaseObject, expectedtoken)
     {
         const router = express.Router();
         router.post('/increaseQuote', async (req, res) =>
         {
             try
             {
+                const token = req.headers.authorization;
+                if(token !== expectedtoken) {
+                    res.json({ code: -105, message: 'token error' });
+                    return;
+                }
                 const body = req.body;
                 if (!body.uuid || !body.time)
                 {

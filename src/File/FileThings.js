@@ -10,6 +10,7 @@ import path from 'path';
  * @property {Object} server - Server configuration
  * @property {string} server.host - Server host
  * @property {number} server.port - Server port
+ * @property {string} server.token - Storage configuration
  */
 
 export class FileThings
