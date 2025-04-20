@@ -14,8 +14,6 @@ const config = await ft.getConfig();
 
 const db = new Database(config.database.dialect, config.database.storage, config.database.logging);
 
-console.log(config);
-
 const databaseObject = {
   connect: db.connectDatabase(),
   resourceTable: await db.resourceTable(),

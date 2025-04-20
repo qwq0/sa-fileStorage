@@ -3,10 +3,10 @@ import { Sequelize, DataTypes } from "@sequelize/core";
 export class Database
 {
     /**
-     * 
+     * To connect database
      * @param {"sqlite" | "mysql" | "postgres" | "mariadb" | "mssql" | "db2" | "snowflake" | "ibmi"} dialect 
-     * @param {string} storage 
-     * @param {boolean} logging
+     * @param {string} storage  The path to the database file
+     * @param {boolean} logging A function that gets executed every time Sequelize would log something.
      */
     constructor(dialect, storage, logging)
     {
